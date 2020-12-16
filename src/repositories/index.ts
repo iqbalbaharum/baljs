@@ -15,3 +15,5 @@ export * from './user-role.repository';
 export * from './session.repository';
 export * from './profile.repository';
 export * from './registry.repository';
+export * from './entity.repository';
+export * from './extended-entity.repository';

@@ -18,3 +18,5 @@ export * from './profile.model';
 export * from './container.model';
 export * from './file.model';
 export * from './registry.model';
+export * from './entity.model';
+export * from './extended-entity.model';

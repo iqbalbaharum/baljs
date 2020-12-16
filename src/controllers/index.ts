@@ -14,4 +14,6 @@ export * from './user-profile.controller';
 export * from './user-role.controller';
 export * from './user.controller';
 export * from './zone.controller';
-
+export * from './entity-user.controller';
+export * from './entity-extended-entity.controller';
+export * from './entity.controller';

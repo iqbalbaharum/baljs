@@ -25,6 +25,8 @@ export async function migrate(args: string[]) {
       'OperationPermission',
       'Session',
       'Profile',
+      'Entity',
+      'ExtendedEntity'
     ],
   });
 
