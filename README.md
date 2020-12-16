@@ -2,7 +2,10 @@
 
 1. MySQL
 2. Redis
-3. MongoDB
+
+# Entity
+
+Entity is a main data object as the basis of data flow
 
 # Framework
 
