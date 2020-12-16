@@ -1,7 +1,7 @@
 import {
   authenticate,
   AuthenticationBindings,
-  UserService,
+  UserService
 } from '@loopback/authentication';
 import {authorize} from '@loopback/authorization';
 import {Getter, inject} from '@loopback/core';
@@ -11,7 +11,7 @@ import {
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
   del,
@@ -24,13 +24,13 @@ import {
   put,
   requestBody,
   Response,
-  RestBindings,
+  RestBindings
 } from '@loopback/rest';
 import {UserProfile} from '@loopback/security';
 import {
   PasswordHasherBindings,
   TokenServiceBindings,
-  UserServiceBindings,
+  UserServiceBindings
 } from '../components/jwt-authentication/keys';
 import {JWTService} from '../components/jwt-authentication/services';
 import {PasswordHasher} from '../components/jwt-authentication/services/hash.password.bcryptjs';
@@ -41,7 +41,7 @@ import {
   ProfileRepository,
   RoleRepository,
   SessionRepository,
-  UserRepository,
+  UserRepository
 } from '../repositories';
 import {CredentialSchema, OTPCredentialSchema, SignUpSchema} from '../schema';
 import {ForgetPasswordSchema} from '../schema/forget-password.schema';
@@ -202,6 +202,10 @@ export class UserController {
     });
 
     await this.userRepository.roles(userCreated.uuid).link(roleMaster.uuid);
+
+    await this.profileRepository.create({
+      userId: userCreated.uuid,
+    });
 
     return userCreated;
   }

@@ -61,6 +61,7 @@
     "dotenv": "^8.2.0",
     "jsonwebtoken": "^8.5.1",
     "loopback-component-storage": "^3.7.0",
+    "loopback-connector-kv-redis": "^3.0.3",
     "loopback-connector-mysql": "^5.4.4",
     "loopback-connector-onesignal": "^1.0.14",
     "loopback-connector-rest": "^3.7.0",

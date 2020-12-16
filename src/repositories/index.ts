@@ -14,3 +14,4 @@ export * from './operation.repository';
 export * from './user-role.repository';
 export * from './session.repository';
 export * from './profile.repository';
+export * from './registry.repository';
