@@ -118,19 +118,6 @@ export class UserController {
         name: credential.name,
       });
 
-      if (process.env.OTP_ENABLE) {
-        const token = this.otpService.getOTPCode();
-
-        const validity: string = process.env.OTP_VALIDITY ?? '0';
-        await this.smsTacService.sendSms(
-          credential.mobile,
-          `Your verification token is ${token}. Only valid for ${
-            parseInt(validity) / 60000
-          } minute.`,
-          `${token}`,
-        );
-      }
-
       await this.credentialRepository.create({
         password: await this.passwordHasher.hashPassword(credential.password),
         userId: userCreated.uuid,
