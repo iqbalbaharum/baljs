@@ -1,21 +1,24 @@
 import {
+  authenticate,
+  AuthenticationBindings
+} from '@loopback/authentication';
+import {Getter, inject} from '@loopback/core';
+import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
+  del, get,
+  getModelSchemaRef, HttpErrors, param,
+  patch, post,
   put,
-  del,
-  requestBody,
+  requestBody
 } from '@loopback/rest';
+import {UserProfile} from '@loopback/security';
 import {Entity} from '../models';
 import {EntityRepository} from '../repositories';
 
@@ -23,6 +26,8 @@ export class EntityController {
   constructor(
     @repository(EntityRepository)
     public entityRepository : EntityRepository,
+    @inject.getter(AuthenticationBindings.CURRENT_USER)
+    public getCurrentUser: Getter<UserProfile>,
   ) {}
 
   @post('/entity', {
@@ -170,4 +175,45 @@ export class EntityController {
   async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.entityRepository.deleteById(id);
   }
+
+  @get('/entity/state/{state}/status/{status}', {
+    responses: {
+      '200': {
+        description: 'Return the latest entity with requested state and status',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: getModelSchemaRef(Entity, {includeRelations: true}),
+            },
+          },
+        },
+      },
+    },
+  })
+  @authenticate('jwt')
+  async findLatestEntityState(
+    @param.path.string('state') state: string,
+    @param.path.string('status') status?: string
+  ): Promise<Entity> {
+
+    const user = await this.getCurrentUser();
+
+    const entity = await this.entityRepository.findOne({
+      where: {
+        and: [
+          { userId: user.user },
+          { state: state },
+          { status: status }
+        ]
+      }
+    });
+
+    if(!entity) {
+      throw new HttpErrors.NotFound('No entity found')
+    }
+
+    return entity;
+  }
 }
+
