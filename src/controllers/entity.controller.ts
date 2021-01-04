@@ -176,7 +176,7 @@ export class EntityController {
     await this.entityRepository.deleteById(id);
   }
 
-  @get('/entity/state/{state}/status/{status}', {
+  @get('/entity/state/{state}', {
     responses: {
       '200': {
         description: 'Return the latest entity with requested state and status',
@@ -193,8 +193,7 @@ export class EntityController {
   })
   @authenticate('jwt')
   async findLatestEntityState(
-    @param.path.string('state') state: string,
-    @param.path.string('status') status?: string
+    @param.path.string('state') state: string
   ): Promise<Entity> {
 
     const user = await this.getCurrentUser();
@@ -203,8 +202,7 @@ export class EntityController {
       where: {
         and: [
           { userId: user.user },
-          { state: state },
-          { status: status }
+          { state: state }
         ]
       }
     });
