@@ -213,5 +213,43 @@ export class EntityController {
 
     return entity;
   }
+
+  @get('/entity/not/state/{state}', {
+    responses: {
+      '200': {
+        description: 'Return the active entity',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: getModelSchemaRef(Entity, {includeRelations: true}),
+            },
+          },
+        },
+      },
+    },
+  })
+  @authenticate('jwt')
+  async findLatestEntityNotEqualState(
+    @param.path.string('state') state: string
+  ): Promise<Entity> {
+
+    const user = await this.getCurrentUser();
+
+    const entity = await this.entityRepository.findOne({
+      where: {
+        and: [
+          { userId: user.user },
+          { state: { neq: state } }
+        ]
+      }
+    });
+
+    if(!entity) {
+      throw new HttpErrors.NotFound('No entity found')
+    }
+
+    return entity;
+  }
 }
 
